@@ -36,23 +36,19 @@
 #include "brkgaAPI/BRKGA.h"
 #include "brkgaAPI/MTRand.h"
 
-#include "GrundySolver.h"
-#include "GrundyDecoder.h"
-#include "GrundyInstance.h"
-#include "GrundyVerifier.h"
+#include "tissueSolver.h"
+#include "tissueDecoder.h"
+#include "tissueInstance.h"
+#include "tissueVerifier.h"
 
 
 
 int main(int argc, char* argv[]) {
-	if(argc < 2) { std::cerr << "usage: <GrundyLIB-file>" << std::endl; return -1; }
+	//if(argc < 2) { std::cerr << "usage: <tissueLIB-file>" << std::endl; return -1; }
 
 	//std::cout << "Welcome to the BRKGA API sample driver.\nFinding a (heuristic) minimizer for "
-	//		<< " the Grundy Number." << std::endl;
+	//		<< " the tissue Number." << std::endl;
 
-	std::string instanceFileName = "";
-	std::string solverType = "grundyNP";
-	std::string outputFile = "outputTest.sol";
-	std::string outputFileExec = "outputTestExec.sol";
 	double timeLimit = 300;
 	double readPe = 0.15;
 	double readPm = 0.1;
@@ -60,62 +56,9 @@ int main(int argc, char* argv[]) {
 	int numThreads = 1;
 	int numGenerations = INT_MAX;
 	int numPopulations = 1;
-	int populationFactor = 0;
+	int populationFactor = 1;
 	int seed = 100;
-
-	for(int i=0; i<argc; i++){
-		if(strcmp(argv[i],"--time") == 0){
-			timeLimit = atof(argv[i+1]);
-			i++;
-		}else if(strcmp(argv[i],"--inst") == 0){
-			instanceFileName = std::string(argv[i+1]);
-			i++;
-		}else if(strcmp(argv[i],"--pe") == 0){
-			readPe = atof(argv[i+1]);
-			i++;
-		}else if(strcmp(argv[i],"--pm") == 0){
-			readPm = atof(argv[i+1]); 
-			i++;
-		}else if(strcmp(argv[i],"--rhoe") == 0){
-			readRhoe = atof(argv[i+1]); 
-			i++;
-		}else if(strcmp(argv[i],"--solver") == 0){
-			solverType = std::string(argv[i+1]); 
-			i++;
-		}else if(strcmp(argv[i],"--output") == 0){
-			outputFile = std::string(argv[i+1]); 
-			i++;
-		}else if(strcmp(argv[i],"--outputExec") == 0){
-			outputFileExec = std::string(argv[i+1]); 
-			i++;
-		}else if(strcmp(argv[i],"--generation") == 0){
-			numGenerations = atoi(argv[i+1]); 
-			i++;
-		}else if(strcmp(argv[i],"--thread") == 0){
-			numThreads = atoi(argv[i+1]); 
-			i++;
-		}else if(strcmp(argv[i],"--population") == 0){
-			numPopulations = atoi(argv[i+1]); 
-			i++;
-		}else if(strcmp(argv[i],"--factor") == 0){
-			populationFactor = atoi(argv[i+1]); 
-			i++;
-		}else if(strcmp(argv[i],"--seed") == 0){
-			seed = atoi(argv[i+1]); 
-			i++;
-		}
-
-	}		
-
-	const clock_t begin = clock();
-
-	const std::string instanceFile = instanceFileName;
-	std::cout << "Instance file: " << instanceFile << std::endl;
-
-	if(instanceFile[instanceFile.length()-1] == 'n'){
-		std::cout<<"exit\n";
-		exit(1);
-	}
+		
 	/*
 	std::cout<<"instanceFile = "<<instanceFile<<"\n";
 	std::cout<<"timeLimit = "<<timeLimit<<"\n";
@@ -128,9 +71,9 @@ int main(int argc, char* argv[]) {
 	std::cout<<"population = "<<numPopulations<<"\n";
 	std::cout<<"factor = "<<populationFactor<<"\n";
 	*/
-
+	const clock_t begin = clock();
 	// Read the instance:
-	GrundyInstance instance(instanceFile); 	// initialize the instance
+	tissueInstance instance; 	// initialize the instance
 	/*
 	std::cout << "Instance read; here's the info:"
 			<< "\n\tName: " << instance.getName()
@@ -139,14 +82,15 @@ int main(int argc, char* argv[]) {
 			<< "\n\tEdge type: " << instance.getProblemType()
 			<< "\n\tEdge Weight Type: " << instance.getEdgeWeightType() << std::endl;
 	*/
+	std::cout<<instance.getNumOps()<<std::endl;
 
 
-	GrundyDecoder decoder(instance, solverType);		// initialize the decoder
+	tissueDecoder decoder(instance);		// initialize the decoder
 
 	const long unsigned rngSeed = seed;	// seed to the random number generator
 	MTRand rng(rngSeed);					// initialize the random number generator
 
-	const unsigned n = instance.getNumNodes();		// size of chromosomes
+	const unsigned n = instance.getNumOps()*2;		// size of chromosomes
 	int populationSizeC = (int) populationFactor*n;
 	const unsigned p = std::max(100, populationSizeC);		// size of population
 	const double pe = readPe;		// fraction of population to be the elite-set
@@ -156,7 +100,7 @@ int main(int argc, char* argv[]) {
 	const unsigned MAXT = numThreads;	// number of threads for parallel decoding
 
 	// initialize the BRKGA-based heuristic
-	BRKGA< GrundyDecoder, MTRand > algorithm(n, p, pe, pm, rhoe, decoder, rng, K, MAXT);
+	BRKGA< tissueDecoder, MTRand > algorithm(n, p, pe, pm, rhoe, decoder, rng, K, MAXT);
 
 	// BRKGA inner loop (evolution) configuration: Exchange top individuals
 	const unsigned X_INTVL = INT_MAX;	// exchange best individuals at every 100 generations
@@ -167,7 +111,7 @@ int main(int argc, char* argv[]) {
 	unsigned relevantGeneration = 1;	// last relevant generation: best updated or reset called
 	const unsigned RESET_AFTER = INT_MAX;
 	std::vector< double > bestChromosome;
-	double bestFitness = 0;
+	double bestFitness = INT_MAX;
 	
 	std::vector<unsigned> relGenerations;
 	std::vector<double> relGenerationsTime;
@@ -186,13 +130,14 @@ int main(int argc, char* argv[]) {
 	// Run the evolution loop:
 	double execTime;
 	unsigned generation = 1;		// current generation
-	std::ofstream ofs;
-	ofs.open(outputFileExec.c_str(), std::ofstream::out | std::ofstream::app);
+	//std::ofstream ofs;
+	//ofs.open(outputFileExec.c_str(), std::ofstream::out | std::ofstream::app);
 	do {
 		algorithm.evolve();	// evolve the population for one generation
 
 		// Bookeeping: has the best solution thus far improved?
-		if(algorithm.getBestFitness() > bestFitness) {
+		//std::cout<<generation<< " " << algorithm.getBestFitness() << "\n";
+		if(algorithm.getBestFitness() < bestFitness) {
 			// Save the best solution to be used after the evolution chain:
 			relevantGeneration = generation;
 			bestFitness = algorithm.getBestFitness();
@@ -202,11 +147,11 @@ int main(int argc, char* argv[]) {
 			execTime = ((double) (actual_time - begin)) / (CLOCKS_PER_SEC);
 			relGenerations.push_back(relevantGeneration);
 			relGenerationsTime.push_back(execTime);
-			/*
+			
 			std::cout << "\t" << generation
 					<< ") Improved best solution thus far: "
 					<< bestFitness << std::endl;
-			*/
+			
 		}
 
 		//  Evolution strategy: restart
@@ -232,13 +177,13 @@ int main(int argc, char* argv[]) {
 
 		// Next generation?
 		//std::cout<<"generation "<<generation<<" "<<bestFitness<<std::endl;
-		ofs << instanceFile << ";" << generation << ";"	<< bestFitness << ";"	<< seed << ";" << execTime << "\n";
+		//ofs << instanceFile << ";" << generation << ";"	<< bestFitness << ";"	<< seed << ";" << execTime << "\n";
 
 		++generation;
 		clock_t actual_time = clock();
 		execTime = ((double) (actual_time - begin)) / (CLOCKS_PER_SEC);
 	} while (generation < MAX_GENS && (execTime < timeLimit));
-	ofs.close();
+	//ofs.close();
 	// print the fitness of the top 10 individuals of each population:
 	/*
 	std::cout << "Fitness of the top 10 individuals of each population:" << std::endl;
@@ -253,43 +198,23 @@ int main(int argc, char* argv[]) {
 	*/
 
 	// rebuild the best solution:
-	GrundySolver bestSolution(instance, bestChromosome, solverType);
+	//tissueSolver bestSolution(instance, bestChromosome);
 
 	// print its distance:
-	std::cout << "Best solution found has objective value = "
-	 		<< bestSolution.getHighestColor() << std::endl;
+	//std::cout << "Best solution found has objective value = "
+	//		<< bestSolution.getHighestColor() << std::endl;
 
-	std::vector<int> nodesColor = bestSolution.getNodesColor();
-	std::vector<int> nodesOrder = bestSolution.getNodesOrder();
+	//std::vector<int> nodesColor = bestSolution.getNodesColor();
+	//std::vector<int> nodesOrder = bestSolution.getNodesOrder();
 	/*
 	for(int i = 0; i < nodesColor.size(); i++){
 		std::cout<<"v="<<i<<" c="<<nodesColor[i]<<std::endl;
 	}
 	*/
 
-	bool validSolutionTest = false;
-	if(solverType.compare("grundyN") == 0 || solverType.compare("grundyNP") == 0 || 
-		solverType.compare("grundyNPB") == 0){
-		validSolutionTest = grundySolutionVerifier(instance, nodesOrder, nodesColor);
-	}else {
-		validSolutionTest = grundyConnectedSolutionVerifier(instance, nodesOrder, nodesColor);
-	}
-	
-	if(validSolutionTest){
-		//std::cout<<"Valid solution\n";
-	}else{
-		//std::cout<<"Invalid solution\n";
-	}
-
 	const clock_t end = clock();
 	std::cout << "BRKGA run finished in " << (end - begin) / double(CLOCKS_PER_SEC) << " s." << std::endl;
 	
 	double executionTime = (end - begin) / double(CLOCKS_PER_SEC);
 
-	
-	instance.writeOutput(outputFile, instanceFile, bestSolution.getHighestColor(), solverType, 
-		validSolutionTest, executionTime, pe, pm, rhoe, generation, 
-		relGenerations[relGenerations.size()-1], relGenerationsTime[relGenerationsTime.size()-1]);
-
-	return 0;
 }

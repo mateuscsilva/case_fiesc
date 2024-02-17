@@ -94,12 +94,12 @@ void Population::setFitness(unsigned i, double f) {
 }
 
 
-static bool Population::sortOperator(std::pair< double, unsigned > a, std::pair< double, unsigned > b){
-	return (a.first > b.first);
-}
+//static bool Population::sortOperator(std::pair< double, unsigned > a, std::pair< double, unsigned > b){
+//	return (a.first > b.first);
+//}
 
 void Population::sortFitness() {
-	sort(fitness.begin(), fitness.end(), sortOperator);
+	sort(fitness.begin(), fitness.end());
 }
 
 double& Population::operator()(unsigned chromosome, unsigned allele) {
