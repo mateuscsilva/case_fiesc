@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 	//std::cout << "Welcome to the BRKGA API sample driver.\nFinding a (heuristic) minimizer for "
 	//		<< " the tissue Number." << std::endl;
 
-	double timeLimit = 300;
+	double timeLimit = 60;
 	double readPe = 0.15;
 	double readPm = 0.1;
 	double readRhoe = 0.7;
@@ -59,31 +59,12 @@ int main(int argc, char* argv[]) {
 	int populationFactor = 1;
 	int seed = 100;
 		
-	/*
-	std::cout<<"instanceFile = "<<instanceFile<<"\n";
-	std::cout<<"timeLimit = "<<timeLimit<<"\n";
-	std::cout<<"pe = "<<readPe<<"\n";
-	std::cout<<"pm = "<<readPm<<"\n";
-	std::cout<<"rhoe = "<<readRhoe<<"\n";
-	std::cout<<"solverType = "<<solverType<<"\n";
-	std::cout<<"outputFile = "<<outputFile<<"\n";
-	std::cout<<"generation = "<<numGenerations<<"\n";
-	std::cout<<"population = "<<numPopulations<<"\n";
-	std::cout<<"factor = "<<populationFactor<<"\n";
-	*/
 	const clock_t begin = clock();
 	// Read the instance:
 	tissueInstance instance; 	// initialize the instance
 	//instance.readV0();
 	instance.readV1();
-	/*
-	std::cout << "Instance read; here's the info:"
-			<< "\n\tName: " << instance.getName()
-			<< "\n\tComment: " << instance.getComment()
-			<< "\n\tDimension: " << instance.getNumNodes()
-			<< "\n\tEdge type: " << instance.getProblemType()
-			<< "\n\tEdge Weight Type: " << instance.getEdgeWeightType() << std::endl;
-	*/
+	
 	std::cout<<instance.getNumOps()<<std::endl;
 
 
@@ -133,8 +114,7 @@ int main(int argc, char* argv[]) {
 	// Run the evolution loop:
 	double execTime;
 	unsigned generation = 1;		// current generation
-	//std::ofstream ofs;
-	//ofs.open(outputFileExec.c_str(), std::ofstream::out | std::ofstream::app);
+	
 	do {
 		algorithm.evolve();	// evolve the population for one generation
 
@@ -178,17 +158,14 @@ int main(int argc, char* argv[]) {
 			*/
 		}
 
-		// Next generation?
 		//std::cout<<"generation "<<generation<<" "<<bestFitness<<std::endl;
-		//ofs << instanceFile << ";" << generation << ";"	<< bestFitness << ";"	<< seed << ";" << execTime << "\n";
-
 		++generation;
 		clock_t actual_time = clock();
 		execTime = ((double) (actual_time - begin)) / (CLOCKS_PER_SEC);
 	} while (generation < MAX_GENS && (execTime < timeLimit));
-	//ofs.close();
+	
 	// print the fitness of the top 10 individuals of each population:
-	/*
+	
 	std::cout << "Fitness of the top 10 individuals of each population:" << std::endl;
 	const unsigned bound = std::min(p, unsigned(10));	// makes sure we have 10 individuals
 	for(unsigned i = 0; i < K; ++i) {
@@ -198,22 +175,15 @@ int main(int argc, char* argv[]) {
 					<< algorithm.getPopulation(i).getFitness(j) << std::endl;
 		}
 	}
-	*/
+	
 
 	// rebuild the best solution:
 	//tissueSolver bestSolution(instance, bestChromosome);
 
 	// print its distance:
 	//std::cout << "Best solution found has objective value = "
-	//		<< bestSolution.getHighestColor() << std::endl;
+	//<< bestSolution.getFitness() << std::endl;
 
-	//std::vector<int> nodesColor = bestSolution.getNodesColor();
-	//std::vector<int> nodesOrder = bestSolution.getNodesOrder();
-	/*
-	for(int i = 0; i < nodesColor.size(); i++){
-		std::cout<<"v="<<i<<" c="<<nodesColor[i]<<std::endl;
-	}
-	*/
 
 	const clock_t end = clock();
 	std::cout << "BRKGA run finished in " << (end - begin) / double(CLOCKS_PER_SEC) << " s." << std::endl;

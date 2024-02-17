@@ -44,10 +44,6 @@ function formulation0(inst::InstanceData)
 
 	@constraint(model, setToMachine[i=1:inst.NOP], sum(x[i,m] for m in 1:inst.NM) == 1)
 
-	#@constraint(model, beginTimeBetweenOP[i=2:inst.NOP], b[i] >= b[i-1] + sum(y[i-1,j]*inst.opList[j] for j in 1:inst.NOP))
-
-	@constraint(model, beginTimeBetweenOP[i=2:inst.NOP, l=1:inst.NOP, m=1:inst.NM; l<i], b[i] >= b[l] + sum(y[l,j]*inst.opList[j] for j in 1:inst.NOP) + BigM*(x[i,m] + x[l,m] - 2))
-
 	@constraint(model, beginAfterFinishTime[i=2:inst.NOP, l=1:inst.NOP, m=1:inst.NM; l<i], b[i] >= f[l] - BigM*(2 - x[i,m] - x[l,m]) )
 
 	@constraint(model, finishTime[i=1:inst.NOP], f[i] == b[i] + sum(y[i,j]*inst.opList[j] for j in 1:inst.NOP) + sum(x[i,m]*inst.machineList[m] for m in 1:inst.NM))
@@ -133,8 +129,6 @@ function formulation1(inst::InstanceData)
 	@constraint(model, order[i=1:inst.NOP], sum(y[i,j] for j in 1:inst.NOP) == 1)
 
 	@constraint(model, allocation[j=1:inst.NOP], sum(y[i,j] for i in 1:inst.NOP) == 1)
-
-	@constraint(model, beginTimeBetweenOP[i=2:inst.NOP, l=1:inst.NOP; l<i], b[i] >= b[l] + sum(y[l,j]*inst.opList[j] for j in 1:inst.NOP))
 
 	@constraint(model, beginAfterFinishTime[i=2:inst.NOP, l=1:inst.NOP; l<i], b[i] >= f[l])
 

@@ -20,12 +20,6 @@ Subject to
  maxTime[2] : -fc[2] + fmax >= 0.0
  maxTime[3] : -fc[3] + fmax >= 0.0
  maxTime[4] : -fc[4] + fmax >= 0.0
- beginTimeBetweenOP[2,1] : -18 y[1,1] - 14 y[1,2] - 12 y[1,3] - 6 y[1,4] - b[1] + b[2] >= 0.0
- beginTimeBetweenOP[3,1] : -18 y[1,1] - 14 y[1,2] - 12 y[1,3] - 6 y[1,4] - b[1] + b[3] >= 0.0
- beginTimeBetweenOP[3,2] : -18 y[2,1] - 14 y[2,2] - 12 y[2,3] - 6 y[2,4] - b[2] + b[3] >= 0.0
- beginTimeBetweenOP[4,1] : -18 y[1,1] - 14 y[1,2] - 12 y[1,3] - 6 y[1,4] - b[1] + b[4] >= 0.0
- beginTimeBetweenOP[4,2] : -18 y[2,1] - 14 y[2,2] - 12 y[2,3] - 6 y[2,4] - b[2] + b[4] >= 0.0
- beginTimeBetweenOP[4,3] : -18 y[3,1] - 14 y[3,2] - 12 y[3,3] - 6 y[3,4] - b[3] + b[4] >= 0.0
  beginAfterFinishTime[2,1] : b[2] - f[1] >= 0.0
  beginAfterFinishTime[3,1] : b[3] - f[1] >= 0.0
  beginAfterFinishTime[3,2] : b[3] - f[2] >= 0.0
