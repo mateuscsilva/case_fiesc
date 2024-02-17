@@ -8,42 +8,40 @@ Subject to
  allocation[2] : y[1,2] + y[2,2] + y[3,2] + y[4,2] == 1.0
  allocation[3] : y[1,3] + y[2,3] + y[3,3] + y[4,3] == 1.0
  allocation[4] : y[1,4] + y[2,4] + y[3,4] + y[4,4] == 1.0
- setToMachine[1] : x[1,1] + x[1,2] == 1.0
- setToMachine[2] : x[2,1] + x[2,2] == 1.0
- setToMachine[3] : x[3,1] + x[3,2] == 1.0
- setToMachine[4] : x[4,1] + x[4,2] == 1.0
- finishTime[1] : -2 x[1,1] - 3 x[1,2] - 12 y[1,1] - 10 y[1,2] - 8 y[1,3] - 4 y[1,4] - b[1] + f[1] == 0.0
- finishTime[2] : -2 x[2,1] - 3 x[2,2] - 12 y[2,1] - 10 y[2,2] - 8 y[2,3] - 4 y[2,4] - b[2] + f[2] == 0.0
- finishTime[3] : -2 x[3,1] - 3 x[3,2] - 12 y[3,1] - 10 y[3,2] - 8 y[3,3] - 4 y[3,4] - b[3] + f[3] == 0.0
- finishTime[4] : -2 x[4,1] - 3 x[4,2] - 12 y[4,1] - 10 y[4,2] - 8 y[4,3] - 4 y[4,4] - b[4] + f[4] == 0.0
- maxTime[1] : -f[1] + fmax >= 0.0
- maxTime[2] : -f[2] + fmax >= 0.0
- maxTime[3] : -f[3] + fmax >= 0.0
- maxTime[4] : -f[4] + fmax >= 0.0
- beginTimeBetweenOP[2,1,1] : -1000 x[1,1] - 1000 x[2,1] - 12 y[1,1] - 10 y[1,2] - 8 y[1,3] - 4 y[1,4] - b[1] + b[2] >= -2000.0
- beginTimeBetweenOP[2,1,2] : -1000 x[1,2] - 1000 x[2,2] - 12 y[1,1] - 10 y[1,2] - 8 y[1,3] - 4 y[1,4] - b[1] + b[2] >= -2000.0
- beginTimeBetweenOP[3,1,1] : -1000 x[1,1] - 1000 x[3,1] - 12 y[1,1] - 10 y[1,2] - 8 y[1,3] - 4 y[1,4] - b[1] + b[3] >= -2000.0
- beginTimeBetweenOP[3,1,2] : -1000 x[1,2] - 1000 x[3,2] - 12 y[1,1] - 10 y[1,2] - 8 y[1,3] - 4 y[1,4] - b[1] + b[3] >= -2000.0
- beginTimeBetweenOP[3,2,1] : -1000 x[2,1] - 1000 x[3,1] - 12 y[2,1] - 10 y[2,2] - 8 y[2,3] - 4 y[2,4] - b[2] + b[3] >= -2000.0
- beginTimeBetweenOP[3,2,2] : -1000 x[2,2] - 1000 x[3,2] - 12 y[2,1] - 10 y[2,2] - 8 y[2,3] - 4 y[2,4] - b[2] + b[3] >= -2000.0
- beginTimeBetweenOP[4,1,1] : -1000 x[1,1] - 1000 x[4,1] - 12 y[1,1] - 10 y[1,2] - 8 y[1,3] - 4 y[1,4] - b[1] + b[4] >= -2000.0
- beginTimeBetweenOP[4,1,2] : -1000 x[1,2] - 1000 x[4,2] - 12 y[1,1] - 10 y[1,2] - 8 y[1,3] - 4 y[1,4] - b[1] + b[4] >= -2000.0
- beginTimeBetweenOP[4,2,1] : -1000 x[2,1] - 1000 x[4,1] - 12 y[2,1] - 10 y[2,2] - 8 y[2,3] - 4 y[2,4] - b[2] + b[4] >= -2000.0
- beginTimeBetweenOP[4,2,2] : -1000 x[2,2] - 1000 x[4,2] - 12 y[2,1] - 10 y[2,2] - 8 y[2,3] - 4 y[2,4] - b[2] + b[4] >= -2000.0
- beginTimeBetweenOP[4,3,1] : -1000 x[3,1] - 1000 x[4,1] - 12 y[3,1] - 10 y[3,2] - 8 y[3,3] - 4 y[3,4] - b[3] + b[4] >= -2000.0
- beginTimeBetweenOP[4,3,2] : -1000 x[3,2] - 1000 x[4,2] - 12 y[3,1] - 10 y[3,2] - 8 y[3,3] - 4 y[3,4] - b[3] + b[4] >= -2000.0
- beginAfterFinishTime[2,1,1] : -1000 x[1,1] - 1000 x[2,1] + b[2] - f[1] >= -2000.0
- beginAfterFinishTime[2,1,2] : -1000 x[1,2] - 1000 x[2,2] + b[2] - f[1] >= -2000.0
- beginAfterFinishTime[3,1,1] : -1000 x[1,1] - 1000 x[3,1] + b[3] - f[1] >= -2000.0
- beginAfterFinishTime[3,1,2] : -1000 x[1,2] - 1000 x[3,2] + b[3] - f[1] >= -2000.0
- beginAfterFinishTime[3,2,1] : -1000 x[2,1] - 1000 x[3,1] + b[3] - f[2] >= -2000.0
- beginAfterFinishTime[3,2,2] : -1000 x[2,2] - 1000 x[3,2] + b[3] - f[2] >= -2000.0
- beginAfterFinishTime[4,1,1] : -1000 x[1,1] - 1000 x[4,1] + b[4] - f[1] >= -2000.0
- beginAfterFinishTime[4,1,2] : -1000 x[1,2] - 1000 x[4,2] + b[4] - f[1] >= -2000.0
- beginAfterFinishTime[4,2,1] : -1000 x[2,1] - 1000 x[4,1] + b[4] - f[2] >= -2000.0
- beginAfterFinishTime[4,2,2] : -1000 x[2,2] - 1000 x[4,2] + b[4] - f[2] >= -2000.0
- beginAfterFinishTime[4,3,1] : -1000 x[3,1] - 1000 x[4,1] + b[4] - f[3] >= -2000.0
- beginAfterFinishTime[4,3,2] : -1000 x[3,2] - 1000 x[4,2] + b[4] - f[3] >= -2000.0
+ finishTime[1] : -18 y[1,1] - 14 y[1,2] - 12 y[1,3] - 6 y[1,4] - b[1] + f[1] == 2.0
+ finishTime[2] : -18 y[2,1] - 14 y[2,2] - 12 y[2,3] - 6 y[2,4] - b[2] + f[2] == 2.0
+ finishTime[3] : -18 y[3,1] - 14 y[3,2] - 12 y[3,3] - 6 y[3,4] - b[3] + f[3] == 2.0
+ finishTime[4] : -18 y[4,1] - 14 y[4,2] - 12 y[4,3] - 6 y[4,4] - b[4] + f[4] == 2.0
+ finishCutTime[1] : -4 y[1,1] - 4 y[1,2] - 6 y[1,3] - 6 y[1,4] - bc[1] + fc[1] == 4.0
+ finishCutTime[2] : -4 y[2,1] - 4 y[2,2] - 6 y[2,3] - 6 y[2,4] - bc[2] + fc[2] == 4.0
+ finishCutTime[3] : -4 y[3,1] - 4 y[3,2] - 6 y[3,3] - 6 y[3,4] - bc[3] + fc[3] == 4.0
+ finishCutTime[4] : -4 y[4,1] - 4 y[4,2] - 6 y[4,3] - 6 y[4,4] - bc[4] + fc[4] == 4.0
+ maxTime[1] : -fc[1] + fmax >= 0.0
+ maxTime[2] : -fc[2] + fmax >= 0.0
+ maxTime[3] : -fc[3] + fmax >= 0.0
+ maxTime[4] : -fc[4] + fmax >= 0.0
+ beginTimeBetweenOP[2,1] : -18 y[1,1] - 14 y[1,2] - 12 y[1,3] - 6 y[1,4] - b[1] + b[2] >= 0.0
+ beginTimeBetweenOP[3,1] : -18 y[1,1] - 14 y[1,2] - 12 y[1,3] - 6 y[1,4] - b[1] + b[3] >= 0.0
+ beginTimeBetweenOP[3,2] : -18 y[2,1] - 14 y[2,2] - 12 y[2,3] - 6 y[2,4] - b[2] + b[3] >= 0.0
+ beginTimeBetweenOP[4,1] : -18 y[1,1] - 14 y[1,2] - 12 y[1,3] - 6 y[1,4] - b[1] + b[4] >= 0.0
+ beginTimeBetweenOP[4,2] : -18 y[2,1] - 14 y[2,2] - 12 y[2,3] - 6 y[2,4] - b[2] + b[4] >= 0.0
+ beginTimeBetweenOP[4,3] : -18 y[3,1] - 14 y[3,2] - 12 y[3,3] - 6 y[3,4] - b[3] + b[4] >= 0.0
+ beginAfterFinishTime[2,1] : b[2] - f[1] >= 0.0
+ beginAfterFinishTime[3,1] : b[3] - f[1] >= 0.0
+ beginAfterFinishTime[3,2] : b[3] - f[2] >= 0.0
+ beginAfterFinishTime[4,1] : b[4] - f[1] >= 0.0
+ beginAfterFinishTime[4,2] : b[4] - f[2] >= 0.0
+ beginAfterFinishTime[4,3] : b[4] - f[3] >= 0.0
+ beginCutAfterFinishLining[1] : -f[1] + bc[1] >= 0.0
+ beginCutAfterFinishLining[2] : -f[2] + bc[2] >= 0.0
+ beginCutAfterFinishLining[3] : -f[3] + bc[3] >= 0.0
+ beginCutAfterFinishLining[4] : -f[4] + bc[4] >= 0.0
+ beginAfterFinishCutTime[2,1] : bc[2] - fc[1] >= 0.0
+ beginAfterFinishCutTime[3,1] : bc[3] - fc[1] >= 0.0
+ beginAfterFinishCutTime[3,2] : bc[3] - fc[2] >= 0.0
+ beginAfterFinishCutTime[4,1] : bc[4] - fc[1] >= 0.0
+ beginAfterFinishCutTime[4,2] : bc[4] - fc[2] >= 0.0
+ beginAfterFinishCutTime[4,3] : bc[4] - fc[3] >= 0.0
  b[1] >= 0.0
  b[2] >= 0.0
  b[3] >= 0.0
@@ -52,6 +50,14 @@ Subject to
  f[2] >= 0.0
  f[3] >= 0.0
  f[4] >= 0.0
+ bc[1] >= 0.0
+ bc[2] >= 0.0
+ bc[3] >= 0.0
+ bc[4] >= 0.0
+ fc[1] >= 0.0
+ fc[2] >= 0.0
+ fc[3] >= 0.0
+ fc[4] >= 0.0
  fmax >= 0.0
  b[1] <= 1000.0
  b[2] <= 1000.0
@@ -61,6 +67,14 @@ Subject to
  f[2] <= 1000.0
  f[3] <= 1000.0
  f[4] <= 1000.0
+ bc[1] <= 1000.0
+ bc[2] <= 1000.0
+ bc[3] <= 1000.0
+ bc[4] <= 1000.0
+ fc[1] <= 1000.0
+ fc[2] <= 1000.0
+ fc[3] <= 1000.0
+ fc[4] <= 1000.0
  fmax <= 1000.0
  b[1] integer
  b[2] integer
@@ -70,15 +84,15 @@ Subject to
  f[2] integer
  f[3] integer
  f[4] integer
+ bc[1] integer
+ bc[2] integer
+ bc[3] integer
+ bc[4] integer
+ fc[1] integer
+ fc[2] integer
+ fc[3] integer
+ fc[4] integer
  fmax integer
- x[1,1] binary
- x[2,1] binary
- x[3,1] binary
- x[4,1] binary
- x[1,2] binary
- x[2,2] binary
- x[3,2] binary
- x[4,2] binary
  y[1,1] binary
  y[2,1] binary
  y[3,1] binary

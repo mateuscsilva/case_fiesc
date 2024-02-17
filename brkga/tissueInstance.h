@@ -21,6 +21,9 @@ public:
 	std::vector< std::vector<int> > opListCutTime;
 	
 	// Getters:
+	void readV0();
+	void readV1();
+	void readV2();
 	int getNumOps() const;
 	int getNumMachines() const;
 	int getCutMachineSetup() const;

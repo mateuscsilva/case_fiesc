@@ -13,7 +13,9 @@ public:
 	tissueSolver(const tissueInstance& instance, const std::vector< double >& chromosome);
 	virtual ~tissueSolver();
 
-	//int tissueSolverN(const tissueInstance& instance, const std::vector< double >& chromosome);
+	int tissueSolverV0(const tissueInstance& instance, const std::vector< double >& chromosome);
+	int tissueSolverV1(const tissueInstance& instance, const std::vector< double >& chromosome);
+	int tissueSolverV2(const tissueInstance& instance, const std::vector< double >& chromosome);
 	int getFitness();
 	
 private:

@@ -5,6 +5,9 @@ using Gurobi
 import Data
 import Formulations
 
-inst = Data.read()
 
-Formulations.formulation0(inst)
+#inst = Data.readV0()
+#Formulations.formulation0(inst)
+
+inst = Data.readV1()
+Formulations.formulation1(inst)
