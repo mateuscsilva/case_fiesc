@@ -20,6 +20,11 @@ public:
 	
 private:
 	unsigned maxFinishTime;
+	struct job {
+		int op;
+		int time;
+		bool complet;
+	};
 };
 
 #endif

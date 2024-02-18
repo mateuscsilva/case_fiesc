@@ -6,7 +6,7 @@ CPP= g++
 #	full binary code optimization
 #	full error and warning reports
 #	no range checking within BRKGA:
-CFLAGS= -O3 -fpermissive -fopenmp -Wextra -Wall -Weffc++ -ansi -pedantic -Woverloaded-virtual -Wcast-align -Wpointer-arith
+CFLAGS= -std=c++14 -O3 -fpermissive -fopenmp -Wextra -Wall -Weffc++ -ansi -pedantic -Woverloaded-virtual -Wcast-align -Wpointer-arith
 
 # Compiler flags for debugging; uncomment if needed:
 #	range checking enabled in the BRKGA API

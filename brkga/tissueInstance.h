@@ -19,6 +19,9 @@ public:
 	std::vector< std::vector<int> > opTime;
 	std::vector< std::vector<int> > machineSetupTime;
 	std::vector< std::vector<int> > opListCutTime;
+	std::vector< std::vector<int> > opSize;
+	int cutMachineSetup;
+	int cutMachineTableChange;
 	
 	// Getters:
 	void readV0();
@@ -32,7 +35,6 @@ private:
 
 	int numOp;
 	int numMachines;
-	int cutMachineSetup;
 
 	//void read();
 	//std::vector<double> convertToChromossome(std::vector<int> nodesOrder);

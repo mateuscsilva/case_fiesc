@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 	//std::cout << "Welcome to the BRKGA API sample driver.\nFinding a (heuristic) minimizer for "
 	//		<< " the tissue Number." << std::endl;
 
-	double timeLimit = 60;
+	double timeLimit = 10;
 	double readPe = 0.15;
 	double readPm = 0.1;
 	double readRhoe = 0.7;
@@ -63,7 +63,8 @@ int main(int argc, char* argv[]) {
 	// Read the instance:
 	tissueInstance instance; 	// initialize the instance
 	//instance.readV0();
-	instance.readV1();
+	//instance.readV1();
+	instance.readV2();
 	
 	std::cout<<instance.getNumOps()<<std::endl;
 
@@ -74,7 +75,8 @@ int main(int argc, char* argv[]) {
 	MTRand rng(rngSeed);					// initialize the random number generator
 
 	//const unsigned n = instance.getNumOps()*2;		// size of chromosomes
-	const unsigned n = instance.getNumOps();
+	//const unsigned n = instance.getNumOps();
+	const unsigned n = instance.getNumOps()*3;
 	int populationSizeC = (int) populationFactor*n;
 	const unsigned p = std::max(100, populationSizeC);		// size of population
 	const double pe = readPe;		// fraction of population to be the elite-set
