@@ -48,6 +48,8 @@ void tissueInstance::readV1(){
 
 void tissueInstance::readV2(){
 	numOp=9;
+	cutMachineTableChange=100;
+	cutMachineSetup=20;
 	opTime.resize(numOp);
 	opTime[1-1].push_back(18); 
 	opTime[2-1].push_back(14);

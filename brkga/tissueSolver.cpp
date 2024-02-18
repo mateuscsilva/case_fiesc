@@ -158,80 +158,95 @@ int tissueSolver::tissueSolverV2(const tissueInstance& instance, const std::vect
 
 	while(time < timeLimit){
 
-		if(position1 >= machines[0].size() && position2 >= machines[1].size()){
+		if(position1 >= machines[0].size() && position2 >= machines[1].size() && table1.size() == 0 && table2.size()==0){
 			break;
 		}
 
-		std::cout<<position1<<" "<<position2<<"\n";
 		if(isChangingTable && timeChangeTable>=instance.cutMachineTableChange){
 			timeChangeTable=0;
 			isChangingTable=false;
 		}
+		/*
+		for(int i=0; i<table1.size(); i++){
+			if(table1[i].time <= time){
+				table1[i].complet = true;	
+			}
+		}
+
+		for(int i=0; i<table2.size(); i++){
+			if(table2[i].time <= time){
+				table2[i].complet = true;	
+			}
+		}*/
 
 		//std::cout<<"2\n";
 		if(table1.size() > 0 && table1[table1.size()-1].time == time){
 			table1[table1.size()-1].complet = true;
 			folding1=false;
-			setup1=0;
+			//setup1=0;
 		}
 
 		//std::cout<<"3\n";
 		if(table2.size() > 0 && table2[table2.size()-1].time == time){
 			table2[table2.size()-1].complet = true;
 			folding2=false;
-			setup2=0;
+			//setup2=0;
 		}
 
 		//std::cout<<"4\n";
-		if(isCutting && cutTime == time){
+		if(!isChangingTable && isCutting && cutTime == time){
 			isCutting = false;
 			if(cutTable1){
 				ocSpacetable1 = ocSpacetable1 - instance.opSize[table1[0].op][0];
 				table1.erase(table1.begin());
-				std::cout<<"CUT TABLE1\n";
 			}else{
 				ocSpacetable2 = ocSpacetable2 - instance.opSize[table2[0].op][0];
 				table2.erase(table2.begin());
-				std::cout<<"CUT TABLE2\n";
 			}
 			posCutElementMachine++;
 		}
 
-		//std::cout<<"5\n";
-		if(cutSetup >= instance.cutMachineSetup && !isChangingTable && !isCutting){
-			if((table1.size() > 0 && table1[0].complet) | (table2.size() > 0 && table2[0].complet)){
-				if(chromosome[posCutElementMachine+2*size] > 0.5 && (table1.size() > 0 && table1[0].complet)){
-					isCutting = true;
-					cutTime = time + instance.opListCutTime[table1[0].op][0];
-					cutTable1 = true;
-				}else if(table2.size() > 0 && table2[0].complet){
-					isCutting = true;
-					cutTime = time + instance.opListCutTime[table2[0].op][0];
-					cutTable1 = false;
-				}
-			}
-		}
-
-		//std::cout<<"6\n";
-		if(((table1.size() > 0 && table1[0].complet) | (table2.size() > 0 && table2[0].complet))
+		if(((table1.size() > 0 && table1[0].complet) || (table2.size() > 0 && table2[0].complet))
 			&& cutSetup < instance.cutMachineSetup && !isChangingTable && !isCutting){
-					if(chromosome[posCutElementMachine+2*size] > 0.5){
+					if((chromosome[posCutElementMachine+2*size] > 0.5 || position2 >= machines[1].size()) &&
+					(table1.size() > 0 && table1[0].complet)){
 						if(machineTable1){
 							cutSetup++;
 						}else{
 							isChangingTable=true;
 							machineTable1=false;
+							timeChangeTable=0;
 						}
-					}else{
+					}else if((chromosome[posCutElementMachine+2*size] <= 0.5 || position1 >= machines[0].size()) && 
+					(table2.size() > 0 && table2[0].complet)){
 						if(!machineTable1){
 							cutSetup++;
 						}else{
 							isChangingTable=true;
 							machineTable1=true;
+							timeChangeTable=0;
 						}
 					}	
 		}
 
+		//std::cout<<"5\n";
+		if(cutSetup >= instance.cutMachineSetup && !isChangingTable && !isCutting){
+			if((table1.size() > 0 && table1[0].complet) || (table2.size() > 0 && table2[0].complet)){
+				if((chromosome[posCutElementMachine+2*size] > 0.5 || position2 >= machines[1].size()) && (table1.size() > 0 && table1[0].complet)){
+					isCutting = true;
+					cutTime = time + instance.opListCutTime[table1[0].op][0];
+					cutTable1 = true;
+					cutSetup=0;
+				}else if((chromosome[posCutElementMachine+2*size] <= 0.5 || position1 >= machines[0].size()) && (table2.size() > 0 && table2[0].complet)){
+					isCutting = true;
+					cutTime = time + instance.opListCutTime[table2[0].op][0];
+					cutTable1 = false;
+					cutSetup=0;
+				}
+			}
+		}
+
+		//std::cout<<"6\n";
 		//std::cout<<"7\n";
 		if(isChangingTable && timeChangeTable<instance.cutMachineTableChange){
 			timeChangeTable++;
@@ -253,7 +268,7 @@ int tissueSolver::tissueSolverV2(const tissueInstance& instance, const std::vect
 		}
 
 		//std::cout<<"10\n";
-		if(setup1 >= instance.machineSetupTime[0][0] &&  position1 < machines[0].size() && 
+		if(!folding1 && setup1 >= instance.machineSetupTime[0][0] &&  position1 < machines[0].size() && 
 			ocSpacetable1 + instance.opSize[machines[0][position1]][0] <= tableSize){
 			ocSpacetable1 += instance.opSize[machines[0][position1]][0];
 			auxTuple.op=machines[0][position1];
@@ -261,11 +276,12 @@ int tissueSolver::tissueSolverV2(const tissueInstance& instance, const std::vect
 			auxTuple.complet=false;
 			table1.push_back(auxTuple);
 			folding1 = true;
+			setup1=0;
 			position1++;
 		}
 		
 		//std::cout<<"11\n";
-		if(setup2 >= instance.machineSetupTime[1][0] && position2 < machines[1].size() && 
+		if(!folding2 && setup2 >= instance.machineSetupTime[1][0] && position2 < machines[1].size() && 
 			ocSpacetable2 + instance.opSize[machines[1][position2]][0] <= tableSize){
 			//std::cout<<"11a"<<machines[1][position2]<<"\n";
 			ocSpacetable2 += instance.opSize[machines[1][position2]][0];
@@ -280,6 +296,7 @@ int tissueSolver::tissueSolverV2(const tissueInstance& instance, const std::vect
 			table2.push_back(auxTuple);
 			//std::cout<<"11g\n";
 			folding2 = true;
+			setup2=0;
 			//std::cout<<"11h\n";
 			position2++;
 		}

@@ -74,9 +74,9 @@ int main(int argc, char* argv[]) {
 	const long unsigned rngSeed = seed;	// seed to the random number generator
 	MTRand rng(rngSeed);					// initialize the random number generator
 
-	//const unsigned n = instance.getNumOps()*2;		// size of chromosomes
-	//const unsigned n = instance.getNumOps();
-	const unsigned n = instance.getNumOps()*3;
+	//const unsigned n = instance.getNumOps()*2;		// v0 - size of chromosomes
+	//const unsigned n = instance.getNumOps();			// v1 - size of chromosomes
+	const unsigned n = instance.getNumOps()*3;			// v2 - size of chromosomes
 	int populationSizeC = (int) populationFactor*n;
 	const unsigned p = std::max(100, populationSizeC);		// size of population
 	const double pe = readPe;		// fraction of population to be the elite-set
