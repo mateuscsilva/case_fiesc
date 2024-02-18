@@ -4,7 +4,7 @@ using JuMP
 using Gurobi
 using Data
 using DataStructures
-
+#using ConditionalJuMP
 using Printf
 
 function defineModel()
@@ -207,6 +207,7 @@ function formulation2(inst::InstanceData)
 	BigM = 1000
 	### Defining variables ###
 	@variable(model, x[i=1:inst.NOP,m=1:inst.NM], Bin)
+	@variable(model, xt[i=1:inst.NOP,t=1:200], Bin)
 	@variable(model, y[i=1:inst.NOP,j=1:inst.NOP], Bin)
 	@variable(model, 0 <= b[i=1:inst.NOP] <= BigM, Int)
 	@variable(model, 0 <= f[i=1:inst.NOP] <= BigM, Int)
@@ -236,6 +237,12 @@ function formulation2(inst::InstanceData)
 
 	@constraint(model, finishCutTime[i=1:inst.NOP], 
 		fc[i] == bc[i] + sum(y[i,j]*inst.opListCutTime[j] for j in 1:inst.NOP) + inst.cutMachineSetup)
+
+	for i=1:inst.NOP
+		for t=1:200
+			#@implies(model, (b[i]>=t && fc[i]<=t) => (xt[i,t]==1))
+		end
+	end
 
 
 	t1 = time_ns()
